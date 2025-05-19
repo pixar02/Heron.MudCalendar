@@ -169,6 +169,16 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
     [Parameter]
     [Category(CategoryTypes.Calendar.Behavior)]
     public bool ShowWeek { get; set; } = true;
+    
+    /// <summary>
+    /// If false the week view is not shown.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>true</c>.
+    /// </remarks>
+    [Parameter]
+    [Category(CategoryTypes.Calendar.Behavior)]
+    public bool ShowShortWeek { get; set; }
 
     /// <summary>
     /// If false the work week view is not shown.
@@ -473,6 +483,7 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
             {
                 CalendarView.Day => "Day",
                 CalendarView.Week => "Week",
+                CalendarView.ShortWeek => "Short Week",
                 CalendarView.WorkWeek => "Work Week",
                 CalendarView.Month => "Month",
                 _ => throw new ArgumentOutOfRangeException()
@@ -491,6 +502,7 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
             {
                 CalendarView.Day => "Day",
                 CalendarView.Week => "Week",
+                CalendarView.ShortWeek => "Short Week",
                 CalendarView.WorkWeek => "Work Week",
                 CalendarView.Month => "Month",
                 _ => throw new ArgumentOutOfRangeException()
@@ -516,10 +528,12 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
         if ((View == CalendarView.Day && !ShowDay)
             || (View == CalendarView.Week && !ShowWeek)
             || (View == CalendarView.WorkWeek && !ShowWorkWeek)
-            || (View == CalendarView.Month && !ShowMonth))
+            || (View == CalendarView.Month && !ShowMonth)
+            || (View == CalendarView.ShortWeek && !ShowWorkWeek))
         {
             if (ShowMonth) View = CalendarView.Month;
             if (ShowWeek) View = CalendarView.Week;
+            if (ShowShortWeek) View = CalendarView.ShortWeek;
             if (ShowWorkWeek) View = CalendarView.WorkWeek;
             if (ShowDay) View = CalendarView.Day;
         }
@@ -581,6 +595,7 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
         {
             CalendarView.Day => CurrentDay.AddDays(1),
             CalendarView.Week => CurrentDay.AddDays(7),
+            CalendarView.ShortWeek => CurrentDay.AddDays(2),
             CalendarView.WorkWeek => CurrentDay.AddDays(7),
             CalendarView.Month => CurrentDay.AddMonths(1),
             _ => CurrentDay
@@ -601,6 +616,7 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
         {
             CalendarView.Day => CurrentDay.AddDays(-1),
             CalendarView.Week => CurrentDay.AddDays(-7),
+            CalendarView.ShortWeek => CurrentDay.AddDays(-2),
             CalendarView.WorkWeek => CurrentDay.AddDays(-7),
             CalendarView.Month => CurrentDay.AddMonths(-1),
             _ => CurrentDay
@@ -705,6 +721,7 @@ public partial class MudCalendar<[DynamicallyAccessedMembers(DynamicallyAccessed
         var list = new List<CalendarView>();
         if (ShowDay) list.Add(CalendarView.Day);
         if (ShowWeek) list.Add(CalendarView.Week);
+        if (ShowShortWeek) list.Add(CalendarView.ShortWeek);
         if (ShowWorkWeek) list.Add(CalendarView.WorkWeek);
         if (ShowMonth) list.Add(CalendarView.Month);
         return list;

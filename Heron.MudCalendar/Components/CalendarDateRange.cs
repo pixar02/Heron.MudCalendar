@@ -30,6 +30,7 @@ public class CalendarDateRange : DateRange
                 Start = _currentDay.Date;
                 break;
             case CalendarView.Week:
+            case CalendarView.ShortWeek:
             case CalendarView.WorkWeek:
                 Start = GetFirstWeekDate(_currentDay, firstDayOfWeek);
                 break;
@@ -49,6 +50,9 @@ public class CalendarDateRange : DateRange
                 break;
             case CalendarView.Week:
                 End = GetLastWeekDate(_currentDay, firstDayOfWeek);
+                break;
+            case CalendarView.ShortWeek:
+                End = GetLastShortWeekDate(_currentDay, firstDayOfWeek);
                 break;
             case CalendarView.WorkWeek:
                 End = GetLastWorkWeekDate(_currentDay, firstDayOfWeek);
@@ -105,7 +109,13 @@ public class CalendarDateRange : DateRange
         // Get last day of the week
         return day.AddDays(6 - GetDayOfWeek(day, firstDayOfWeek));
     }
-
+    
+    public static DateTime GetLastShortWeekDate(DateTime day, DayOfWeek? firstDayOfWeek)
+    {
+        // Get last day of the work week
+        return day.AddDays(2 - GetDayOfWeek(day, firstDayOfWeek));
+    }
+    
     public static DateTime GetLastWorkWeekDate(DateTime day, DayOfWeek? firstDayOfWeek)
     {
         // Get last day of the work week

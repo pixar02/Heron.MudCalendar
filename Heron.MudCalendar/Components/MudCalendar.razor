@@ -35,6 +35,9 @@
                             case CalendarView.WorkWeek:
                                 @RenderWorkWeekView
                                 break;
+                            case CalendarView.ShortWeek:
+                                @RenderShortWeekView
+                                break;
                             case CalendarView.Month:
                             default:
                                 @RenderMonthView
@@ -54,7 +57,8 @@
     public RenderFragment<T> CellTemplate { get; set; } =
         calendarItem =>
             @<div class="mud-cal-cell-template">
-                <MudChip T="string" Label="true" Color="Color.Primary" Class="mud-cal-cell-template-chip">@calendarItem.Text</MudChip>
+                <MudChip T="string" Label="true" Color="Color.Primary"
+                         Class="mud-cal-cell-template-chip">@calendarItem.Text</MudChip>
             </div>;
 
     /// <summary>
@@ -62,38 +66,48 @@
     /// </summary>
     protected virtual RenderFragment RenderToolbar =>
         @<div class="mud-cal-toolbar" style="@ToolbarStyle">
-                <div class="mud-cal-toolbar-nav align-center">
-                    @if (ShowPrevNextButtons)
-                    {
-                            <MudIconButton Variant="@ButtonVariant" Icon="@Icons.Material.Outlined.ChevronLeft" aria-label="@PrevAriaLabel" Color="@Color" OnClick="OnPreviousClicked" />
-                            <MudIconButton Variant="@ButtonVariant" Icon="@Icons.Material.Outlined.ChevronRight" aria-label="@NextAriaLabel" Color="@Color" OnClick="OnNextClicked" />
-                    }
-                    @if (ShowDatePicker)
-                    {
-                        <CalendarDatePicker Culture="@Culture" @ref="_datePicker" OpenTo="@(View == CalendarView.Month ? OpenTo.Month : OpenTo.Date)" FirstDayOfWeek="@GetFirstDayOfWeekByCalendarView(View)" FixDay="@(View == CalendarView.Month ? 1 : null)" Date="PickerDate" DateChanged="DatePickerDateChanged" View="View" Variant="ButtonVariant" Color="Color" PickerOpened="OnDatePickerOpened"/>
-                    }
-                    @if (ShowTodayButton)
-                    {
-                        <MudButton Variant="@ButtonVariant" Color="@Color" OnClick="OnTodayClicked">@DrawTodayText()</MudButton>
-                    }
-                    @if (ToolbarContent != null)
-                    {
-                        <div>
-                            @ToolbarContent
-                        </div>
-                    }
-                </div>
-                <div>
-                    @if (ShowDropdownViewSelector)
-                    {
-                        <EnumMenu Value="@View" T="CalendarView" Color="@Color" Variant="ButtonVariant" AllowedValues="AllowedViews()" ValueChanged="OnViewChanging"/>
-                    }
-                    else
-                    {
-                        <EnumSwitch Value="@View" T="CalendarView" Color="@Color" AllowedValues="AllowedViews()" ValueChanged="OnViewChanging"/>
-                    }
-                </div>
-            </div>;
+            <div class="mud-cal-toolbar-nav align-center">
+                @if (ShowPrevNextButtons)
+                {
+                    <MudIconButton Variant="@ButtonVariant" Icon="@Icons.Material.Outlined.ChevronLeft"
+                                   aria-label="@PrevAriaLabel" Color="@Color" OnClick="OnPreviousClicked"/>
+                    <MudIconButton Variant="@ButtonVariant" Icon="@Icons.Material.Outlined.ChevronRight"
+                                   aria-label="@NextAriaLabel" Color="@Color" OnClick="OnNextClicked"/>
+                }
+                @if (ShowDatePicker)
+                {
+                    <CalendarDatePicker Culture="@Culture" @ref="_datePicker"
+                                        OpenTo="@(View == CalendarView.Month ? OpenTo.Month : OpenTo.Date)"
+                                        FirstDayOfWeek="@GetFirstDayOfWeekByCalendarView(View)"
+                                        FixDay="@(View == CalendarView.Month ? 1 : null)" Date="PickerDate"
+                                        DateChanged="DatePickerDateChanged" View="View" Variant="ButtonVariant"
+                                        Color="Color" PickerOpened="OnDatePickerOpened"/>
+                }
+                @if (ShowTodayButton)
+                {
+                    <MudButton Variant="@ButtonVariant" Color="@Color"
+                               OnClick="OnTodayClicked">@DrawTodayText()</MudButton>
+                }
+                @if (ToolbarContent != null)
+                {
+                    <div>
+                        @ToolbarContent
+                    </div>
+                }
+            </div>
+            <div>
+                @if (ShowDropdownViewSelector)
+                {
+                    <EnumMenu Value="@View" T="CalendarView" Color="@Color" Variant="ButtonVariant"
+                              AllowedValues="AllowedViews()" ValueChanged="OnViewChanging"/>
+                }
+                else
+                {
+                    <EnumSwitch Value="@View" T="CalendarView" Color="@Color" AllowedValues="AllowedViews()"
+                                ValueChanged="OnViewChanging"/>
+                }
+            </div>
+        </div>;
 
     /// <summary>
     /// Renders the month view.
@@ -102,21 +116,27 @@
         @<MonthView T="T"/>;
 
     /// <summary>
+    /// Renders the short month view.
+    /// </summary>
+    protected virtual RenderFragment RenderShortWeekView => 
+        @<ShortWeekView T="T"/>;
+
+    /// <summary>
     /// Renders the week view.
     /// </summary>
     protected virtual RenderFragment RenderWeekView =>
-        @<WeekView T="T" />;
-    
+        @<WeekView T="T"/>;
+
     /// <summary>
     /// Renders the work week view.
     /// </summary>
     protected virtual RenderFragment RenderWorkWeekView =>
-        @<WorkWeekView T="T" />;
+        @<WorkWeekView T="T"/>;
 
     /// <summary>
     /// Renders the day view.
     /// </summary>
     protected virtual RenderFragment RenderDayView =>
-        @<DayView T="T" />;
+        @<DayView T="T"/>;
 
 }
